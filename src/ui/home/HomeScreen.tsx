@@ -8,7 +8,7 @@ import {
 import {selector, useRecoilValueLoadable} from 'recoil';
 import HomeState from '../../model/HomeState';
 import getHomeStateSelector from '../../selector/GetHomeStateSelector';
-import PokemonItem from './PokemonItem';
+import PokemonGridItem from './PokemonGridItem';
 import PhotoScreen from '../photo/PhotoScreen';
 
 const HomeScreen = ({navigation}) => {
@@ -33,7 +33,13 @@ const HomeScreen = ({navigation}) => {
                     <FlatList
                         data={homeState.contents.pokemons}
                         renderItem={({item}) =>
-                            <PokemonItem navigation={navigation} item={item} />
+                            <View style={{flexDirection: 'row'}}>
+                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
+                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
+                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
+                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
+                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
+                            </View>
                         }
                     />
                 </View>
