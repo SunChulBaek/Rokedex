@@ -31,15 +31,15 @@ const HomeScreen = ({navigation}) => {
             return (
                 <View style={{flex: 1}}>
                     <FlatList
-                        data={homeState.contents.pokemons}
-                        renderItem={({item}) =>
+                        data={rowedData(homeState.contents.pokemons, 5)}
+                        renderItem={(items) => (
                             <View style={{flexDirection: 'row'}}>
-                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
-                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
-                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
-                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
-                                <PokemonGridItem style={{flex: 1}} navigation={navigation} item={item} />
-                            </View>
+                                {items.item.map((value, index) => (
+                                    value != undefined ?
+                                    <PokemonGridItem key={value.id} style={{flex: 1}} navigation={navigation} item={value} />
+                                    : <View key={index} style={{flex: 1}} />
+                                ))}
+                            </View>)
                         }
                     />
                 </View>
@@ -49,6 +49,20 @@ const HomeScreen = ({navigation}) => {
         default:
             return (<Text>XXX</Text>);
     }
+}
+
+function rowedData(pokemons: Pokemon[], columnCount: number) {
+    var ret = new Array();
+    const rowCount = (pokemons.length / columnCount) + (pokemons.length % columnCount == 0 ? 0 : 1);
+    for (var i = 0; i < rowCount; i++) {
+        var row: Pokemon[] = new Array();
+        const length = i < rowCount - 1 ? columnCount : pokemons.length - i * columnCount;
+        for (var j = 0; j < length; j++) {
+            row.push(pokemons[(i * columnCount) + j]);
+        }
+        ret.push(row);
+    }
+    return ret;
 }
 
 export default HomeScreen;

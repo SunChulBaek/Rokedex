@@ -13,9 +13,17 @@ const App = () => {
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen
-                        name="Home"
+                        name="Rokedex"
                         component={HomeScreen}
-                        options={{headerShown: false}}
+                        options={{
+                            headerShown: true,
+                            headerTitleStyle: {
+                                color: 'white'
+                            },
+                            headerStyle: {
+                                backgroundColor: '#0097A7'
+                            }
+                        }}
                     />
                     <Stack.Screen
                         name="Photo"

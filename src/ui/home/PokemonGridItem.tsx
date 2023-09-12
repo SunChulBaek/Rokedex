@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         paddingLeft: 2,
         paddingRight: 2,
         borderRadius: 5,
-        backgroundColor: 'blue'
+        backgroundColor: '#0097A7'
     },
     labelText: {
         fontSize: 8,
