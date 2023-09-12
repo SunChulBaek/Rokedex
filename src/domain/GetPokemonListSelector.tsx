@@ -1,5 +1,5 @@
 import {selectorFamily} from 'recoil';
-import Pokemon from '../model/Pokemon';
+import Pokemon from '../ui/model/Pokemon';
 
 const getPokemonListSelector = selectorFamily({
     key: 'getPhotos',

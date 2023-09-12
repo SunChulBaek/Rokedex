@@ -1,8 +1,8 @@
 import {selectorFamily} from 'recoil';
-import getPokemonListSelector from './GetPokemonListSelector';
+import getPokemonListSelector from '../../domain/GetPokemonListSelector';
 import HomeState from '../model/HomeState';
 
-const getHomeStateSelector = selectorFamily({
+const homeStateSelector = selectorFamily({
     key: 'getHomeState',
     get: (params) => async ({get}) => {
         console.debug('getHomeStateSelector()');
@@ -15,4 +15,4 @@ const getHomeStateSelector = selectorFamily({
     }
 });
 
-export default getHomeStateSelector;
+export default homeStateSelector;
