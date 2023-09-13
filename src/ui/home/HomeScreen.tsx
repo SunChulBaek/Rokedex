@@ -5,14 +5,13 @@ import {
     Text,
     View
 } from 'react-native';
-import {selector, useRecoilValueLoadable} from 'recoil';
-import HomeState from '../model/HomeState';
+import {useRecoilValueLoadable} from 'recoil';
 import homeStateSelector from './HomeStateSelector';
 import PokemonGridItem from './PokemonGridItem';
 import PhotoScreen from '../photo/PhotoScreen';
 
 const HomeScreen = ({navigation}) => {
-    const homeState = useRecoilValueLoadable(homeStateSelector({limit: 50, offset: 0}));
+    const homeState = useRecoilValueLoadable(homeStateSelector);
     console.debug(`HomeScreen(${homeState.state})`);
 
     if (homeState == null || homeState == undefined) {

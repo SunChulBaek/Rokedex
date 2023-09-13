@@ -2,7 +2,7 @@ import {selectorFamily} from 'recoil';
 import Pokemon from '../ui/model/Pokemon';
 
 const getPokemonListSelector = selectorFamily({
-    key: 'getPhotos',
+    key: 'getPokemons',
     get: (params) => async ({get}) => {
         try {
             console.debug(`getPokemonListSelector() params.limit=${params.limit}, params.offset = ${params.offset}`);

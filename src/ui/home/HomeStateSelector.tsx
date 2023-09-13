@@ -1,11 +1,13 @@
-import {selectorFamily} from 'recoil';
+import {selector} from 'recoil';
 import getPokemonListSelector from '../../domain/GetPokemonListSelector';
 import HomeState from '../model/HomeState';
+import homeStateParams from './HomeStateParams';
 
-const homeStateSelector = selectorFamily({
+const homeStateSelector = selector({
     key: 'getHomeState',
-    get: (params) => async ({get}) => {
-        console.debug('getHomeStateSelector()');
+    get: async ({get}) => {
+        const params = get(homeStateParams);
+        console.debug(`getHomeStateSelector(limit = ${params.limit}, offset = ${params.offset})`);
         const photos = get(getPokemonListSelector({limit: params.limit, offset: params.offset}));
         if (photos != undefined) {
             return new HomeState(false, photos);
