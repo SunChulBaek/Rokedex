@@ -5,18 +5,37 @@ import {
     Text,
     View
 } from 'react-native';
-import {useRecoilValueLoadable} from 'recoil';
-import homeStateSelector from './HomeStateSelector';
+import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
 import PhotoScreen from '../photo/PhotoScreen';
 
 const HomeScreen = ({navigation}) => {
-    const homeState = useRecoilValueLoadable(homeStateSelector);
-    console.debug(`HomeScreen(${homeState.state})`);
+    const [homeState, setHomeState] = useState({
+        state: 'loading',
+        pokemons: []
+    });
 
-    if (homeState == null || homeState == undefined) {
-        return (<Text>Init...</Text>);
+    const getPokemons = async (offset: number) => {
+        console.debug(`getPokemons(offset = ${offset})`);
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=50&offset=${offset}`);
+        const result = await response.json();
+        const newPokemons = result.results.map((e) => new Pokemon(
+            e.url.split('/')[6],
+            e.name,
+            e.url
+        ));
+        setHomeState({
+            state: 'hasValue',
+            pokemons: [
+                ...homeState.pokemons,
+                ...newPokemons
+            ]
+        });
     }
+
+    useEffect(() => {
+        getPokemons(0);
+    }, []);
 
     switch(homeState.state) {
         case 'loading':
@@ -30,7 +49,7 @@ const HomeScreen = ({navigation}) => {
             return (
                 <View style={{flex: 1}}>
                     <FlatList
-                        data={rowedData(homeState.contents.pokemons, 5)}
+                        data={rowedData(homeState.pokemons, 5)}
                         renderItem={(items) => (
                             <View style={{flexDirection: 'row'}}>
                                 {items.item.map((value, index) => (
@@ -40,6 +59,11 @@ const HomeScreen = ({navigation}) => {
                                 ))}
                             </View>)
                         }
+                        onEndReachedThreshold={0.8}
+                        onEndReached={() => {
+                            console.debug('onEndReached()');
+                            getPokemons(homeState.pokemons.length);
+                        }}
                     />
                 </View>
             );
