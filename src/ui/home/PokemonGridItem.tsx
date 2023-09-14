@@ -6,7 +6,7 @@ import {
     View
 } from 'react-native';
 import MyImage from '../common/MyImage';
-import getImageUrl from '../../util/Util.tsx';
+import Utils from '../../util/Utils.tsx';
 
 const styles = StyleSheet.create({
     labelBg: {
@@ -29,15 +29,12 @@ const PokemonGridItem = ({navigation, item}) => {
         <TouchableOpacity
             style={{flex: 1}}
             onPress={() => {
-                navigation.navigate('Photo', {
-                    url: item.url,
-                    title: item.title
-                });
+                navigation.navigate('PokemonDetail', item);
             }}
         >
             <MyImage
                 style={{width: '100%', aspectRatio: '1/1'}}
-                source={{uri: getImageUrl(item.url.split("/")[6])}} />
+                source={{uri: Utils.getImageUrl(item.id)}} />
             <View
                 style={styles.labelBg}>
                 <Text style={styles.labelText}>{item.id}</Text>

@@ -7,7 +7,9 @@ import {
 } from 'react-native';
 import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
-import PhotoScreen from '../photo/PhotoScreen';
+import PokemonDetailScreen from '../detail/PokemonDetailScreen';
+import Repository from '../../domain/PokemonRepository';
+import Utils from '../../util/Utils.tsx';
 
 const HomeScreen = ({navigation}) => {
     const [homeState, setHomeState] = useState({
@@ -17,13 +19,7 @@ const HomeScreen = ({navigation}) => {
 
     const getPokemons = async (offset: number) => {
         console.debug(`getPokemons(offset = ${offset})`);
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=50&offset=${offset}`);
-        const result = await response.json();
-        const newPokemons = result.results.map((e) => new Pokemon(
-            e.url.split('/')[6],
-            e.name,
-            e.url
-        ));
+        const newPokemons = await Repository.getPokemonList(offset);
         setHomeState({
             state: 'hasValue',
             pokemons: [

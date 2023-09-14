@@ -11,10 +11,6 @@ class NetworkNamedAPIResource {
         this.name = name;
         this.url = url;
     }
-
-    number getId() {
-        return 0;
-    }
 }
 
 export default Pokemon;
