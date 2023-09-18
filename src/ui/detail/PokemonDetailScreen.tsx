@@ -39,7 +39,7 @@ const PokemonDetailScreen = ({navigation, route}) => {
     }, []);
 
     return (
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
             <View style={styles.item}>
                 <MyImage
                     style={{width: 200, aspectRatio: '1/1'}}
@@ -47,10 +47,10 @@ const PokemonDetailScreen = ({navigation, route}) => {
                 />
             </View>
             <View style={styles.item}>
-                <Text>{route.params.id} {pokemon.name}</Text>
+                <Text style={{color: 'black'}}>{route.params.id} {pokemon.name}</Text>
             </View>
             <View style={styles.item}>
-                <Text>{pokemon.flavor}</Text>
+                <Text style={{color: 'black'}}>{pokemon.flavor}</Text>
             </View>
         </ScrollView>
     );
