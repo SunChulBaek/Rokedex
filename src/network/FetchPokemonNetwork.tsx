@@ -1,8 +1,8 @@
-import NetworkDataSource from './NetworkDataSource';
+import PokemonNetworkDataSource from './PokemonNetworkDataSource';
 import NetworkAPIResourceList from './model/NetworkAPIResourceList';
 import NetworkPokemonSpecies from './model/NetworkPokemonSpecies';
 
-class FetchPokemonNetwork implements NetworkDataSource {
+class FetchPokemonNetwork implements PokemonNetworkDataSource {
 
     private baseUrl: string = 'https://pokeapi.co/api/v2/';
 
