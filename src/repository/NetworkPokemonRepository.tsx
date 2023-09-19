@@ -1,14 +1,15 @@
+import PokemonRepository from './PokemonRepository';
 import NetworkDataSource from  '../network/NetworkDataSource';
-import PokemonNetworkDataSource from '../network/PokemonNetworkDataSource';
+import FetchPokemonNetwork from '../network/FetchPokemonNetwork';
 import Pokemon from '../ui/model/Pokemon';
 import Species from '../ui/model/Species';
 import Utils from '../util/Utils';
 
-class PokemonRepository {
+class NetworkPokemonRepository implements PokemonRepository {
 
-    private network: NetworkDataSource = new PokemonNetworkDataSource();
+    private network: NetworkDataSource = new FetchPokemonNetwork();
 
-    public async getPokemonList(offset: number) {
+    public async getPokemonList(offset: number): Promise<Pokemon[]> {
          const result = await this.network.getPokemonList(offset);
          return await Promise.resolve(result.results.map((e) => new Pokemon(
              Utils.getIdFromUrl(e.url),
@@ -17,7 +18,7 @@ class PokemonRepository {
          )));
     }
 
-    public async getSpecies(id: integer) {
+    public async getSpecies(id: integer): Promise<Species> {
         const result = await this.network.getSpecies(id);
         return await Promise.resolve(new Species(
             Utils.findName(result.names, 'ko'),
@@ -26,4 +27,4 @@ class PokemonRepository {
     }
 }
 
-export default PokemonRepository;
+export default NetworkPokemonRepository;
