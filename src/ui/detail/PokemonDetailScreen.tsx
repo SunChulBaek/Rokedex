@@ -7,7 +7,7 @@ import {
     View
 } from 'react-native';
 import MyImage from '../common/MyImage';
-import Repository from '../../domain/PokemonRepository';
+import PokemonRepository from '../../domain/PokemonRepository';
 import Utils from '../../util/Utils.tsx';
 
 const styles = StyleSheet.create({
@@ -27,7 +27,8 @@ const PokemonDetailScreen = ({navigation, route}) => {
     });
 
     const getSpecies = async (id: integer) => {
-        const species = await Repository.getSpecies(route.params.id);
+        const repository = new PokemonRepository();
+        const species = await repository.getSpecies(route.params.id);
         setPokemon({
             name: species.name,
             flavor: species.flavor
