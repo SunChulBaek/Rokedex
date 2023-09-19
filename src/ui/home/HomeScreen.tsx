@@ -8,7 +8,7 @@ import {
 import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
 import PokemonDetailScreen from '../detail/PokemonDetailScreen';
-import Repository from '../../domain/PokemonRepository';
+import PokemonRepository from '../../domain/PokemonRepository';
 import Utils from '../../util/Utils.tsx';
 
 const HomeScreen = ({navigation}) => {
@@ -19,7 +19,8 @@ const HomeScreen = ({navigation}) => {
 
     const getPokemons = async (offset: number) => {
         console.debug(`getPokemons(offset = ${offset})`);
-        const newPokemons = await Repository.getPokemonList(offset);
+        const repository = new PokemonRepository();
+        const newPokemons = await repository.getPokemonList(offset);
         setHomeState({
             state: 'hasValue',
             pokemons: [

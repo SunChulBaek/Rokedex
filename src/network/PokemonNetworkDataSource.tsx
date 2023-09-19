@@ -1,17 +1,22 @@
+import NetworkDataSource from './NetworkDataSource';
 import NetworkAPIResourceList from './model/NetworkAPIResourceList';
 import NetworkPokemonSpecies from './model/NetworkPokemonSpecies';
 
-const baseUrl = 'https://pokeapi.co/api/v2/';
+class DefaultNetworkDataSource implements NetworkDataSource {
 
-export default {
-    getPokemonList: async(offset: integer): NetworkAPIResourceList => {
-        const response = await fetch(`${baseUrl}pokemon?limit=50&offset=${offset}`);
+    private baseUrl: string = 'https://pokeapi.co/api/v2/';
+
+    public async getPokemonList(offset: integer) {
+        const response = await fetch(`${this.baseUrl}pokemon?limit=50&offset=${offset}`);
         const result = await response.json();
-        return result;
-    },
-    getSpecies: async(id: integer): NetworkPokemonSpecies => {
-        const response = await fetch(`${baseUrl}pokemon-species/${id}`);
-        const result = await response.json();
-        return result;
+        return await Promise.resolve(result);
     }
-};
+
+    public async getSpecies(id: integer) {
+        const response = await fetch(`${this.baseUrl}pokemon-species/${id}`);
+        const result = await response.json();
+        return await Promise.resolve(result);
+    }
+}
+
+export default DefaultNetworkDataSource;
