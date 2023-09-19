@@ -6,11 +6,7 @@ import Utils from '../util/Utils';
 
 class PokemonRepository {
 
-    private network: NetworkDataSource;
-
-    constructor() {
-        this.network = new PokemonNetworkDataSource();
-    }
+    private network: NetworkDataSource = new PokemonNetworkDataSource();
 
     public async getPokemonList(offset: number) {
          const result = await this.network.getPokemonList(offset);
