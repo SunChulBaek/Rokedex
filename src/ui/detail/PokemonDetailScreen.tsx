@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {
+    ActivityIndicator,
     ScrollView,
     Image,
     StyleSheet,
     Text,
     View
 } from 'react-native';
+import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import MyImage from '../common/MyImage';
-import PokemonRepository from '../../repository/PokemonRepository';
-import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
 import Utils from '../../util/Utils.tsx';
+import pokemonDetailParams from './PokemonDetailParams';
+import pokemonDetailViewModel from './PokemonDetailViewModel';
 
 const styles = StyleSheet.create({
     item: {
@@ -20,42 +22,56 @@ const styles = StyleSheet.create({
 });
 
 const PokemonDetailScreen = ({navigation, route}) => {
-    console.debug(`PokemonDetailScreen(id = ${route.params.id})`);
-
-    const [pokemon, setPokemon] = useState({
-        name: route.params.name,
-        flavor: ''
-    });
-
-    const getSpecies = async (id: integer) => {
-        const repository: PokemonRepository = new NetworkPokemonRepository();
-        const species = await repository.getSpecies(route.params.id);
-        setPokemon({
-            name: species.name,
-            flavor: species.flavor
-        });
-    }
+    const [params, setParams] = useRecoilState(pokemonDetailParams);
+    const result = useRecoilValueLoadable(pokemonDetailViewModel);
+    console.debug(`PokemonDetailScreen(${result.state}) id = ${route.params.id}`);
 
     useEffect(() => {
-        getSpecies(route.params.id);
+        setParams(route.params.id);
     }, []);
 
-    return (
-        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-            <View style={styles.item}>
-                <MyImage
-                    style={{width: 200, aspectRatio: '1/1'}}
-                    source={{uri: Utils.getImageUrl(route.params.id)}}
-                />
-            </View>
-            <View style={styles.item}>
-                <Text style={{color: 'black'}}>{route.params.id} {pokemon.name}</Text>
-            </View>
-            <View style={styles.item}>
-                <Text style={{color: 'black'}}>{pokemon.flavor}</Text>
-            </View>
-        </ScrollView>
-    );
+    switch(result.state) {
+        case 'loading':
+            {/* 기본이름 보여주고, flavor 영역에 프로그레스 돌림 */}
+            return (
+                <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+                    <View style={styles.item}>
+                        <MyImage
+                            style={{width: 200, aspectRatio: '1/1'}}
+                            source={{uri: Utils.getImageUrl(route.params.id)}}
+                        />
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={{color: 'black'}}>{route.params.id} {route.params.name}</Text>
+                    </View>
+                    <View
+                        style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+                        <ActivityIndicator size='large' />
+                    </View>
+                </ScrollView>
+            );
+        case 'hasValue':
+            return (
+                <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+                    <View style={styles.item}>
+                        <MyImage
+                            style={{width: 200, aspectRatio: '1/1'}}
+                            source={{uri: Utils.getImageUrl(route.params.id)}}
+                        />
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={{color: 'black'}}>{route.params.id} {result.contents.name}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={{color: 'black'}}>{result.contents.flavor}</Text>
+                    </View>
+                </ScrollView>
+            );
+        case 'hasError':
+            return (<Text>Error...</Text>);
+        default:
+            return (<Text>XXX</Text>);
+    }
 }
 
 export default PokemonDetailScreen;

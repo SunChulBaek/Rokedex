@@ -7,6 +7,16 @@ import Utils from '../util/Utils';
 
 class NetworkPokemonRepository implements PokemonRepository {
 
+    private static instance: NetworkPokemonRepository;
+
+    public static getInstance() {
+        if (this.instance == undefined) {
+            console.debug('NetworkPokemonRepository created');
+            this.instance = new NetworkPokemonRepository();
+        }
+        return this.instance
+    }
+
     private network: NetworkDataSource = new FetchPokemonNetwork();
 
     public async getPokemonList(offset: number): Promise<Pokemon[]> {

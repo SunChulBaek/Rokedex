@@ -1,17 +1,14 @@
-import {selector} from 'recoil';
-import getPokemonListParams from './GetPokemonListParams';
+import {selectorFamily} from 'recoil';
 import PokemonRepository from '../repository/PokemonRepository';
 import NetworkPokemonRepository from '../repository/NetworkPokemonRepository';
 
-const getPokemonListUseCase = selector({
+const getPokemonListUseCase = selectorFamily({
     key: 'getPokemonListUseCase',
-    get: async ({get}) => {
+    get: (offset: integer) => async ({get}) => {
         try {
-            const params = get(getPokemonListParams);
-            console.debug(`getPokemonListUseCase(${params})`);
-            const repository: PokemonRepository = new NetworkPokemonRepository();
-            const newPokemons = await repository.getPokemonList(params);
-            return newPokemons;
+            console.debug(`getPokemonListUseCase(${offset})`);
+            const repository: PokemonRepository = NetworkPokemonRepository.getInstance();
+            return await repository.getPokemonList(offset);
         } catch (e) {
             console.error(`getPokemonListUseCase() ${e.message}`);
         }

@@ -8,16 +8,15 @@ import {
 import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
-import PokemonDetailScreen from '../detail/PokemonDetailScreen';
-import PokemonRepository from '../../repository/PokemonRepository';
-import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
 import Utils from '../../util/Utils.tsx';
 import homeState2 from './HomeState';
-import getPokemonListUseCase from '../../domain/GetPokemonListUseCase';
+import homeParams from './HomeParams';
+import homeViewModel from './HomeViewModel';
 
 const HomeScreen = ({navigation}) => {
     const [home2, setHome2] = useRecoilState(homeState2);
-    const result = useRecoilValueLoadable(getPokemonListUseCase);
+    const [param, setParam] = useRecoilState(homeParams);
+    const result = useRecoilValueLoadable(homeViewModel);
     console.debug(`getPokemons(${result.state})`);
 
     switch(result.state) {
