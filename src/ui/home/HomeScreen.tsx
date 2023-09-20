@@ -5,37 +5,22 @@ import {
     Text,
     View
 } from 'react-native';
+import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
 import PokemonDetailScreen from '../detail/PokemonDetailScreen';
 import PokemonRepository from '../../repository/PokemonRepository';
 import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
 import Utils from '../../util/Utils.tsx';
+import homeState2 from './HomeState';
+import getPokemonListUseCase from '../../domain/GetPokemonListUseCase';
 
 const HomeScreen = ({navigation}) => {
-    const [homeState, setHomeState] = useState({
-        state: 'loading',
-        pokemons: []
-    });
+    const [home2, setHome2] = useRecoilState(homeState2);
+    const result = useRecoilValueLoadable(getPokemonListUseCase);
+    console.debug(`getPokemons(${result.state})`);
 
-    const getPokemons = async (offset: number) => {
-        console.debug(`getPokemons(offset = ${offset})`);
-        const repository: PokemonRepository = new NetworkPokemonRepository();
-        const newPokemons = await repository.getPokemonList(offset);
-        setHomeState({
-            state: 'hasValue',
-            pokemons: [
-                ...homeState.pokemons,
-                ...newPokemons
-            ]
-        });
-    }
-
-    useEffect(() => {
-        getPokemons(0);
-    }, []);
-
-    switch(homeState.state) {
+    switch(result.state) {
         case 'loading':
             return (
                 <View
@@ -47,7 +32,7 @@ const HomeScreen = ({navigation}) => {
             return (
                 <View style={{flex: 1}}>
                     <FlatList
-                        data={rowedData(homeState.pokemons, 5)}
+                        data={rowedData(result.contents, 5)}
                         renderItem={(items) => (
                             <View style={{flexDirection: 'row'}}>
                                 {items.item.map((value, index) => (
@@ -60,7 +45,6 @@ const HomeScreen = ({navigation}) => {
                         onEndReachedThreshold={0.8}
                         onEndReached={() => {
                             console.debug('onEndReached()');
-                            getPokemons(homeState.pokemons.length);
                         }}
                     />
                 </View>
