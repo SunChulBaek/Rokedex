@@ -60,10 +60,13 @@ const PokemonDetailScreen = ({navigation, route}) => {
                         />
                     </View>
                     <View style={styles.item}>
-                        <Text style={{color: 'black'}}>{route.params.id} {result.contents.name}</Text>
+                        <Text style={{color: 'black'}}>{route.params.id} {result.contents.species.name}</Text>
                     </View>
                     <View style={styles.item}>
-                        <Text style={{color: 'black'}}>{result.contents.flavor}</Text>
+                        <Text style={{color: 'black'}}>몸무게: {(result.contents.weight / 10).toFixed(1)}kg 키: {(result.contents.height / 10).toFixed(1)}m</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={{color: 'black'}}>{result.contents.species.flavor}</Text>
                     </View>
                 </ScrollView>
             );
