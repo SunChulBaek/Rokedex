@@ -18,10 +18,10 @@ const App = () => {
                         options={{
                             headerShown: true,
                             headerTitleStyle: {
-                                color: 'white'
+                                color: '#61dafb'
                             },
                             headerStyle: {
-                                backgroundColor: '#0097A7'
+                                backgroundColor: '#282c34'
                             }
                         }}
                     />

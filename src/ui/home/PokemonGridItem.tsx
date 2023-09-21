@@ -16,11 +16,11 @@ const styles = StyleSheet.create({
         paddingLeft: 2,
         paddingRight: 2,
         borderRadius: 5,
-        backgroundColor: '#0097A7'
+        backgroundColor: '#282c34'
     },
     labelText: {
         fontSize: 8,
-        color: 'white'
+        color: '#61dafb'
     }
 });
 
