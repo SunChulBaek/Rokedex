@@ -10,6 +10,7 @@ class PokemonDetail {
     private species: Species;
     // type
     private tIds: integer[];
+    private types: Type[];
 
     public constructor(
         id: integer,
@@ -18,8 +19,10 @@ class PokemonDetail {
         weight: integer,
         sId: integer,
         species: Species,
-        tIds: integer[]
+        tIds: integer[],
+        types: Type[]
     ) {
+        console.debug(`PokemonDetail.constructor(tIds = ${tIds})`);
         this.id = id;
         this.name = name;
         this.height = height;
@@ -27,6 +30,7 @@ class PokemonDetail {
         this.sId = sId;
         this.species = species;
         this.tIds = tIds;
+        this.types = types;
     }
 }
 

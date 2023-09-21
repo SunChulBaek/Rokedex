@@ -13,8 +13,14 @@ class FetchPokemonNetwork implements PokemonNetworkDataSource {
         return await Promise.resolve(result);
     }
 
-    public async getSpecies(id: integer): Promise<NetworkPokemonSpecies> {
-        const response = await fetch(`${this.baseUrl}/pokemon-species/${id}`);
+    public async getSpecies(sId: integer): Promise<NetworkPokemonSpecies> {
+        const response = await fetch(`${this.baseUrl}/pokemon-species/${sId}`);
+        const result = await response.json();
+        return await Promise.resolve(result);
+    }
+
+    public async getType(tId: integer): Promise<NetworkType> {
+        const response = await fetch(`${this.baseUrl}/type/${tId}`);
         const result = await response.json();
         return await Promise.resolve(result);
     }

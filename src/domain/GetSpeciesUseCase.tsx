@@ -5,12 +5,12 @@ import Species from '../ui/model/Species';
 
 const getSpeciesUseCase = selectorFamily({
     key: 'getSpeciesUseCase',
-    get: (id: integer) => async ({get}) => {
-        if (id != 0) {
+    get: (sId: integer) => async ({get}) => {
+        if (sId != 0) {
             try {
-                console.debug(`getSpeciesUseCase(${id})`);
+                console.debug(`getSpeciesUseCase(${sId})`);
                 const repository: PokemonRepository = NetworkPokemonRepository.getInstance();
-                const species = await repository.getSpecies(id);
+                const species = await repository.getSpecies(sId);
                 return species;
             } catch (e) {
                 console.error(`getSpeciesUseCase() ${e.message}`);

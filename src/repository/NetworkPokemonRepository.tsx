@@ -4,6 +4,7 @@ import FetchPokemonNetwork from '../network/FetchPokemonNetwork';
 import Pokemon from '../ui/model/Pokemon';
 import PokemonDetail from '../ui/model/PokemonDetail';
 import Species from '../ui/model/Species';
+import Type from '../ui/model/Type';
 import Utils from '../util/Utils';
 
 class NetworkPokemonRepository implements PokemonRepository {
@@ -29,11 +30,18 @@ class NetworkPokemonRepository implements PokemonRepository {
          )));
     }
 
-    public async getSpecies(id: integer): Promise<Species> {
-        const result = await this.network.getSpecies(id);
+    public async getSpecies(sId: integer): Promise<Species> {
+        const result = await this.network.getSpecies(sId);
         return await Promise.resolve(new Species(
             Utils.findName(result.names, 'ko'),
             Utils.findFlavor(result.flavor_text_entries, 'ko')
+        ));
+    }
+
+    public async getType(tId: integer): Promise<Type> {
+        const result = await this.network.getType(tId);
+        return await Promise.resolve(new Type(
+            Utils.findName(result.names, 'ko')
         ));
     }
 
@@ -46,7 +54,8 @@ class NetworkPokemonRepository implements PokemonRepository {
             result.weight,
             Utils.getIdFromUrl(result.species.url),
             undefined,
-            result.types.map((type) => Utils.getIdFromUrl(type.type.url))
+            result.types.map((type) => Utils.getIdFromUrl(type.type.url)),
+            undefined
         ));
     }
 }
