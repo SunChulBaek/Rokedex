@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import Pokemon from '../model/Pokemon';
-import PokemonGridItem from './PokemonGridItem';
+import PokemonGridRow from './PokemonGridRow';
 import Utils from '../../util/Utils.tsx';
 import HomeState from './HomeState';
 import HomeParams from './HomeParams';
@@ -40,14 +40,8 @@ const HomeScreen = ({navigation}) => {
                     <FlatList
                         data={rowedData(items, 5)}
                         renderItem={(items) => (
-                            <View style={{flexDirection: 'row'}}>
-                                {items.item.map((value, index) => (
-                                    value != undefined ?
-                                    <PokemonGridItem key={value.id} style={{flex: 1}} navigation={navigation} item={value} />
-                                    : <View key={index} style={{flex: 1}} />
-                                ))}
-                            </View>)
-                        }
+                            <PokemonGridRow navigation={navigation} items={items} />
+                        )}
                         onEndReachedThreshold={0.4}
                         onEndReached={() => {
                             console.debug('onEndReached()');
