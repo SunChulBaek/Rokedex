@@ -18,6 +18,14 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center'
+    },
+    stat: {
+        flowDirection: 'horizontal',
+        justifyContent: 'space-between',
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 50,
+        paddingRight: 50
     }
 });
 
@@ -60,17 +68,25 @@ const PokemonDetailScreen = ({navigation, route}) => {
                         />
                     </View>
                     <View style={styles.item}>
-                        <Text style={{color: 'black'}}>{route.params.id} {result.contents.species.name}</Text>
+                        <Text style={{color: 'black', fontSize: 30}}>
+                            {route.params.id} {result.contents.species.name}
+                        </Text>
                     </View>
-                    <View style={styles.item}>
-                        <Text style={{color: 'black'}}>
+                    <View style={[styles.item, styles.stat]}>
+                        <Text style={{color: 'black', fontSize: 12}}>
                             몸무게: {(result.contents.weight / 10).toFixed(1)}kg
+                        </Text>
+                        <Text style={{color: 'black', fontSize: 12}}>
                             키: {(result.contents.height / 10).toFixed(1)}m
+                        </Text>
+                        <Text style={{color: 'black', fontSize: 12}}>
                             타입: {result.contents.types.map((type) => type.name).reduce((acc, cur) => `${acc}, ${cur}`)}
                         </Text>
                     </View>
                     <View style={styles.item}>
-                        <Text style={{color: 'black'}}>{result.contents.species.flavor}</Text>
+                        <Text style={{color: 'black', fontSize: 16}}>
+                            {result.contents.species.flavor.replace('\n', ' ')}
+                        </Text>
                     </View>
                 </ScrollView>
             );
