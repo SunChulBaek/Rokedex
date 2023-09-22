@@ -1,8 +1,8 @@
 import {atom} from 'recoil';
 
-const homeParams = atom({
-    key: 'homeParams',
+const HomeParams = atom({
+    key: 'HomeParams',
     default: 0
 });
 
-export default homeParams;
+export default HomeParams;

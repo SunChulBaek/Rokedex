@@ -1,8 +1,8 @@
 import {atom} from 'recoil';
 
-const homeState2 = atom({
-    key: 'homeState',
+const HomeState = atom({
+    key: 'HomeState',
     default: []
 });
 
-export default homeState2;
+export default HomeState;

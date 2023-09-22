@@ -1,13 +1,18 @@
-import {selector} from 'recoil';
-import homeParams from './HomeParams';
+import {selectorFamily} from 'recoil';
 import getPokemonListUseCase from '../../domain/GetPokemonListUseCase';
 
-const homeViewModel = selector({
+var result = [];
+
+const homeViewModel = selectorFamily({
     key: 'homeViewModel',
-    get: async ({get}) => {
-        const params = get(homeParams);
-        console.debug(`homeViewModel(${params})`);
-        return await get(getPokemonListUseCase(params));
+    get: (offset: integer) => async ({get}) => {
+        console.debug(`homeViewModel(offset = ${offset})`);
+        const newPokemons = await get(getPokemonListUseCase(offset));
+        result = [
+            ...result,
+            ...newPokemons
+        ];
+        return result;
     }
 })
 

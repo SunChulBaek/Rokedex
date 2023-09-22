@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -9,29 +9,36 @@ import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import Pokemon from '../model/Pokemon';
 import PokemonGridItem from './PokemonGridItem';
 import Utils from '../../util/Utils.tsx';
-import homeState2 from './HomeState';
-import homeParams from './HomeParams';
+import HomeState from './HomeState';
+import HomeParams from './HomeParams';
 import homeViewModel from './HomeViewModel';
 
-const HomeScreen = ({navigation}) => {
-    const [home2, setHome2] = useRecoilState(homeState2);
-    const [param, setParam] = useRecoilState(homeParams);
-    const result = useRecoilValueLoadable(homeViewModel);
-    console.debug(`getPokemons(${result.state})`);
+var items = [];
 
-    switch(result.state) {
+const HomeScreen = ({navigation}) => {
+    const [home, setHome] = useRecoilState(HomeState);
+    const [params, setParams] = useRecoilState(HomeParams);
+    const result = useRecoilValueLoadable(homeViewModel(params));
+
+    console.debug(`HomeScreen(${result.state}) ${result.contents.length}`);
+
+    if (result.state == 'hasValue') {
+        items = result.contents; // state가 loading일 때는 contents가 undefined라 저장해둠
+    }
+
+    switch (result.state) {
         case 'loading':
-            return (
-                <View
-                    style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size='large' />
-                </View>
-            );
+//             return (
+//                 <View
+//                     style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+//                     <ActivityIndicator size='large' />
+//                 </View>
+//             );
         case 'hasValue':
             return (
                 <View style={{flex: 1}}>
                     <FlatList
-                        data={rowedData(result.contents, 5)}
+                        data={rowedData(items, 5)}
                         renderItem={(items) => (
                             <View style={{flexDirection: 'row'}}>
                                 {items.item.map((value, index) => (
@@ -41,9 +48,10 @@ const HomeScreen = ({navigation}) => {
                                 ))}
                             </View>)
                         }
-                        onEndReachedThreshold={0.8}
+                        onEndReachedThreshold={0.4}
                         onEndReached={() => {
                             console.debug('onEndReached()');
+                            setParams(items.length);
                         }}
                     />
                 </View>
