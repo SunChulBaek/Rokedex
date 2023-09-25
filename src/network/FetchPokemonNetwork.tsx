@@ -1,5 +1,6 @@
 import PokemonNetworkDataSource from './PokemonNetworkDataSource';
 import NetworkAPIResourceList from './model/NetworkAPIResourceList';
+import NetworkEvolutionChain from './model/NetworkEvolutionChain';
 import NetworkPokemonSpecies from './model/NetworkPokemonSpecies';
 import NetworkPokemon from './model/NetworkPokemon';
 
@@ -21,6 +22,12 @@ class FetchPokemonNetwork implements PokemonNetworkDataSource {
 
     public async getType(tId: integer): Promise<NetworkType> {
         const response = await fetch(`${this.baseUrl}/type/${tId}`);
+        const result = await response.json();
+        return await Promise.resolve(result);
+    }
+
+    public async getEvolutionChain(ecId: integer): Promise<NetworkEvolutionChain> {
+        const response = await fetch(`${this.baseUrl}/evolution-chain/${ecId}`);
         const result = await response.json();
         return await Promise.resolve(result);
     }

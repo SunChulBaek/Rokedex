@@ -5,6 +5,8 @@ import Pokemon from '../ui/model/Pokemon';
 import PokemonDetail from '../ui/model/PokemonDetail';
 import Species from '../ui/model/Species';
 import Type from '../ui/model/Type';
+import EvolutionChain from '../ui/model/EvolutionChain';
+import EvolutionPair from '../ui/model/EvolutionPair';
 import Utils from '../util/Utils';
 
 class NetworkPokemonRepository implements PokemonRepository {
@@ -34,7 +36,8 @@ class NetworkPokemonRepository implements PokemonRepository {
         const result = await this.network.getSpecies(sId);
         return await Promise.resolve(new Species(
             Utils.findName(result.names, 'ko'),
-            Utils.findFlavor(result.flavor_text_entries, 'ko')
+            Utils.findFlavor(result.flavor_text_entries, 'ko'),
+            Utils.getIdFromUrl(result.evolution_chain.url)
         ));
     }
 
@@ -43,6 +46,31 @@ class NetworkPokemonRepository implements PokemonRepository {
         return await Promise.resolve(new Type(
             Utils.findName(result.names, 'ko')
         ));
+    }
+
+    public async getEvolutionChain(ecId: integer): Promise<EvolutionChain> {
+        const result = await this.network.getEvolutionChain(ecId);
+        var chain = result.chain;
+        var pairs = [];
+        if (chain.evolves_to.length > 0) {
+            for (var i = 0; i < chain.evolves_to.length; i++) {
+                var evolvesTo1 = chain.evolves_to[i];
+                pairs = [
+                    ...pairs,
+                    new EvolutionPair(Utils.getIdFromUrl(chain.species.url), Utils.getIdFromUrl(evolvesTo1.species.url))
+                ];
+                if (evolvesTo1.evolves_to.length > 0) {
+                    for (var j = 0; j < evolvesTo1.evolves_to.length; j++) {
+                        var evolvesTo2 = evolvesTo1.evolves_to[i];
+                        pairs = [
+                            ...pairs,
+                           new EvolutionPair(Utils.getIdFromUrl(evolvesTo1.species.url), Utils.getIdFromUrl(evolvesTo2.species.url))
+                        ];
+                    }
+                }
+            }
+        }
+        return await Promise.resolve(new EvolutionChain(pairs));
     }
 
     public async getPokemonDetail(id: integer): Promise<PokemonDetail> {
