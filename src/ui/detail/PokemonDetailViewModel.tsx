@@ -28,7 +28,8 @@ const pokemonDetailViewModel = selector({
                 pokemon.sId,
                 species,
                 pokemon.tIds,
-                types
+                types,
+                evolutionChain
             );
         } else {
             return new PokemonDetail(pId, '', 0, 0, 0, undefined, []);

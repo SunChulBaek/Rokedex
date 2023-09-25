@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {useRecoilState, useRecoilValueLoadable} from 'recoil';
 import MyImage from '../common/MyImage';
+import EvolutionRow from '../common/EvolutionRow';
 import Utils from '../../util/Utils.tsx';
 import pokemonDetailParams from './PokemonDetailParams';
 import pokemonDetailViewModel from './PokemonDetailViewModel';
@@ -20,10 +21,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     stat: {
-        flowDirection: 'horizontal',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingTop: 10,
         paddingBottom: 10,
+        paddingLeft: 50,
+        paddingRight: 50
+    },
+    evolution: {
+        width: '100%',
         paddingLeft: 50,
         paddingRight: 50
     }
@@ -88,6 +94,9 @@ const PokemonDetailScreen = ({navigation, route}) => {
                             {result.contents.species.flavor.replace('\n', ' ')}
                         </Text>
                     </View>
+                    {result.contents.evolutionChain.pairs.map((pair) => (
+                        <EvolutionRow key={`${pair.from}-${pair.to}`} navigation={navigation} pair={pair} />
+                    ))}
                 </ScrollView>
             );
         case 'hasError':
