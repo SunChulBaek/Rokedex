@@ -36,6 +36,7 @@ const MyImage = (props:  MyImageProps) => {
     return (
         <TouchableOpacity
             style={[styles.center, props.style]}
+            activeOpacity={props.onClick != undefined ? 0.2 : 1}
             onPress = {() => {
                 props.onClick != undefined ? props.onClick() : { }
             }}
