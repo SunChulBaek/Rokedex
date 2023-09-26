@@ -41,14 +41,20 @@ const HomeScreen = ({navigation}) => {
                 <View style={{flex: 1}}>
                     <ScrollView style={{width: '100%', height: 50, backgroundColor: 'lightgrey'}} horizontal={true}>
                         {[778, 10044, 10196, 10157, 936, 135, 269, 792].map((e) => (
-                            <MyImage
+                            <View
                                 key={`preset-${e}`}
-                                style={{width: 50, aspectRatio: '1/1'}}
-                                source={{uri: Utils.getImageUrl(e)}}
-                                onClick={() => {
-                                    navigation.navigate('PokemonDetail', {id: e});
-                                }}
-                            />
+                                style={{width: 50, aspectRatio: '1/1', justifyContent: 'center', alignItems: 'center'}}
+                            >
+                                <View style={{width:40, height: 40, borderRadius: 20, backgroundColor: 'white'}}>
+                                    <MyImage
+                                        style={{width: '100%', height: '100%'}}
+                                        source={{uri: Utils.getImageUrl(e)}}
+                                        onClick={() => {
+                                            navigation.navigate('PokemonDetail', {id: e});
+                                        }}
+                                    />
+                                </View>
+                            </View>
                         ))}
                     </ScrollView>
                     <FlatList
