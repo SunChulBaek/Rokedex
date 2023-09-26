@@ -8,6 +8,9 @@ class PokemonDetail {
     // species
     private sId: integer;
     private species: Species;
+    // form
+    private fId: integer;
+    private form: Form;
     // type
     private tIds: integer[];
     private types: Type[];
@@ -21,6 +24,8 @@ class PokemonDetail {
         weight: integer,
         sId: integer,
         species: Species,
+        fId: integer,
+        form: Form,
         tIds: integer[],
         types: Type[],
         evolutionChain: EvolutionChain
@@ -32,6 +37,8 @@ class PokemonDetail {
         this.weight = weight;
         this.sId = sId;
         this.species = species;
+        this.fId = fId;
+        this.form = form;
         this.tIds = tIds;
         this.types = types;
         this.evolutionChain = evolutionChain;

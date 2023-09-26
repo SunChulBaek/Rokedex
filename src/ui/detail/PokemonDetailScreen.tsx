@@ -74,8 +74,8 @@ const PokemonDetailScreen = ({navigation, route}) => {
                         />
                     </View>
                     <View style={styles.item}>
-                        <Text style={{color: 'black', fontSize: 30}}>
-                            {route.params.id} {result.contents.species.name}
+                        <Text style={{color: 'black', fontSize: result.contents.form.formName != undefined ? 20 : 30}}>
+                            {route.params.id} {result.contents.species.name} {result.contents.form.formName != undefined ? `(${result.contents.form.formName})`: ''}
                         </Text>
                     </View>
                     <View style={[styles.item, styles.stat]}>

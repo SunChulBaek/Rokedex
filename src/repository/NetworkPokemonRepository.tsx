@@ -8,6 +8,7 @@ import Type from '../ui/model/Type';
 import EvolutionChain from '../ui/model/EvolutionChain';
 import EvolutionItem from '../ui/model/EvolutionItem';
 import EvolutionPair from '../ui/model/EvolutionPair';
+import Form from '../ui/model/Form';
 import Utils from '../util/Utils';
 
 class NetworkPokemonRepository implements PokemonRepository {
@@ -92,6 +93,13 @@ class NetworkPokemonRepository implements PokemonRepository {
         return await Promise.resolve(new EvolutionChain(pairs));
     }
 
+    public async getForm(fId: integer): Promise<Form> {
+        const result = await this.network.getPokemonForm(fId);
+        return await Promise.resolve(new Form(
+            Utils.findName(result.form_names, 'ko')
+        ));
+    }
+
     public async getPokemonDetail(id: integer): Promise<PokemonDetail> {
         const result = await this.network.getPokemonDetail(id);
         return await Promise.resolve(new PokemonDetail(
@@ -100,6 +108,8 @@ class NetworkPokemonRepository implements PokemonRepository {
             result.height,
             result.weight,
             Utils.getIdFromUrl(result.species.url),
+            undefined,
+            Utils.getIdFromUrl(result.forms[0].url),
             undefined,
             result.types.map((type) => Utils.getIdFromUrl(type.type.url)),
             undefined

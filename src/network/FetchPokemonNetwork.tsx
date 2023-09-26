@@ -32,6 +32,12 @@ class FetchPokemonNetwork implements PokemonNetworkDataSource {
         return await Promise.resolve(result);
     }
 
+    public async getPokemonForm(fId: integer): Promise<NetworkPokemonForm> {
+        const response = await fetch(`${this.baseUrl}/pokemon-form/${fId}`);
+        const result = await response.json();
+        return await Promise.resolve(result);
+    }
+
     public async getPokemonDetail(id: integer): Promise<NetworkPokemon> {
         const response = await fetch(`${this.baseUrl}/pokemon/${id}`);
         const result = await response.json();
