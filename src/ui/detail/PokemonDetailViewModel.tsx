@@ -1,4 +1,4 @@
-import {selector} from 'recoil';
+import {selectorFamily} from 'recoil';
 import pokemonDetailParams from './PokemonDetailParams';
 import getPokemonDetailUseCase from '../../domain/GetPokemonDetailUseCase';
 import getSpeciesUseCase from '../../domain/GetSpeciesUseCase';
@@ -7,18 +7,17 @@ import getEvolutionChainUseCase from '../../domain/GetEvolutionChainUseCase';
 import PokemonDetail from '../model/PokemonDetail';
 import Species from '../model/Species';
 
-const pokemonDetailViewModel = selector({
+const pokemonDetailViewModel = selectorFamily({
     key: 'pokemonDetailViewModel',
-    get: async ({get}) => {
-        const pId = get(pokemonDetailParams);
+    get: (pId) => async ({get}) => {
         if (pId != 0) {
             const pokemon: PokemonDetail = await get(getPokemonDetailUseCase(pId));
             const species: Species = await get(getSpeciesUseCase(pokemon.sId));
             const types = await pokemon.tIds.map((tId) => get(getTypeUseCase(tId)));
             const evolutionChain = await get(getEvolutionChainUseCase(species.ecId));
-            for (var i = 0; i< evolutionChain.pairs.length; i++) {
+            for (var i = 0; i < evolutionChain.pairs.length; i++) {
                 const pair = evolutionChain.pairs[i];
-                console.debug(`pokemonDetailViewModel() from ${pair.from} to ${pair.to}`);
+                console.debug(`pokemonDetailViewModel() from ${pair.from.id} to ${pair.to.id}`);
             }
             return new PokemonDetail(
                 pokemon.id,

@@ -1,10 +1,12 @@
+import EvolutionItem from './EvolutionItem';
+
 class EvolutionPair {
-    private from: integer;
-    private to: integer;
+    private from: EvolutionItem;
+    private to: EvolutionItem;
 
     public constructor(
-        from: integer,
-        to: integer
+        from: EvolutionItem,
+        to: EvolutionItem
     ) {
         this.from = from;
         this.to = to;

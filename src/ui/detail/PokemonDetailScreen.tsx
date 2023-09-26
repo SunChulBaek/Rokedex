@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 
 const PokemonDetailScreen = ({navigation, route}) => {
     const [params, setParams] = useRecoilState(pokemonDetailParams);
-    const result = useRecoilValueLoadable(pokemonDetailViewModel);
+    const result = useRecoilValueLoadable(pokemonDetailViewModel(route.params.id));
     console.debug(`PokemonDetailScreen(${result.state}) id = ${route.params.id}`);
 
     useEffect(() => {
@@ -95,7 +95,7 @@ const PokemonDetailScreen = ({navigation, route}) => {
                         </Text>
                     </View>
                     {result.contents.evolutionChain.pairs.map((pair) => (
-                        <EvolutionRow key={`${pair.from}-${pair.to}`} navigation={navigation} pair={pair} />
+                        <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pair={pair} />
                     ))}
                 </ScrollView>
             );

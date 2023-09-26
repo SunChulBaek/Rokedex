@@ -23,12 +23,18 @@ const EvolutionRow = ({navigation, pair}) => {
         <View style={[styles.evolution]}>
             <MyImage
                 style={{width: 100, aspectRatio: '1/1'}}
-                source={{uri: Utils.getImageUrl(pair.from)}}
+                source={{uri: Utils.getImageUrl(pair.from.id)}}
+                onClick={() => {
+                    navigation.push('PokemonDetail', {id: pair.from.id});
+                }}
             />
             <Text>=></Text>
             <MyImage
                 style={{width: 100, aspectRatio: '1/1'}}
-                source={{uri: Utils.getImageUrl(pair.to)}}
+                source={{uri: Utils.getImageUrl(pair.to.id)}}
+                onClick={() => {
+                    navigation.push('PokemonDetail', {id: pair.to.id});
+                }}
             />
         </View>
     );

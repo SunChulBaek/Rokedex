@@ -6,6 +6,7 @@ import PokemonDetail from '../ui/model/PokemonDetail';
 import Species from '../ui/model/Species';
 import Type from '../ui/model/Type';
 import EvolutionChain from '../ui/model/EvolutionChain';
+import EvolutionItem from '../ui/model/EvolutionItem';
 import EvolutionPair from '../ui/model/EvolutionPair';
 import Utils from '../util/Utils';
 
@@ -57,14 +58,32 @@ class NetworkPokemonRepository implements PokemonRepository {
                 var evolvesTo1 = chain.evolves_to[i];
                 pairs = [
                     ...pairs,
-                    new EvolutionPair(Utils.getIdFromUrl(chain.species.url), Utils.getIdFromUrl(evolvesTo1.species.url))
+                    new EvolutionPair(
+                        new EvolutionItem(
+                            Utils.getIdFromUrl(chain.species.url),
+                            chain.species.name
+                        ),
+                        new EvolutionItem(
+                            Utils.getIdFromUrl(evolvesTo1.species.url),
+                            evolvesTo1.species.name
+                        )
+                    )
                 ];
                 if (evolvesTo1.evolves_to.length > 0) {
                     for (var j = 0; j < evolvesTo1.evolves_to.length; j++) {
                         var evolvesTo2 = evolvesTo1.evolves_to[i];
                         pairs = [
                             ...pairs,
-                           new EvolutionPair(Utils.getIdFromUrl(evolvesTo1.species.url), Utils.getIdFromUrl(evolvesTo2.species.url))
+                           new EvolutionPair(
+                               new EvolutionItem(
+                                   Utils.getIdFromUrl(evolvesTo1.species.url),
+                                   evolvesTo1.species.name
+                               ),
+                               new EvolutionItem(
+                                   Utils.getIdFromUrl(evolvesTo2.species.url),
+                                   evolvesTo2.species.name
+                               ),
+                           )
                         ];
                     }
                 }
