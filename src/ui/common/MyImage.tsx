@@ -6,7 +6,7 @@ import {
     Image,
     ImageSource,
     StyleSheet,
-    View
+    TouchableOpacity
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -15,13 +15,16 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     absolute: {
-        position: 'absolute'
+        position: 'absolute',
+        width: '100%',
+        height: '100%'
     },
 });
 
 type MyImageProps = {
     style: StyleSheet,
-    source: ImageSource
+    source: ImageSource,
+    onClick: () => any
 };
 
 const MyImage = (props:  MyImageProps) => {
@@ -31,9 +34,14 @@ const MyImage = (props:  MyImageProps) => {
     });
 
     return (
-        <View style={[styles.center, props.style]}>
+        <TouchableOpacity
+            style={[styles.center, props.style]}
+            onPress = {() => {
+                props.onClick != undefined ? props.onClick() : { }
+            }}
+        >
             <Image
-                style={[styles.absolute, props.style]}
+                style={[styles.absolute]}
                 source={props.source}
                 onLoadEnd = {() => {
                     setState({
@@ -44,7 +52,7 @@ const MyImage = (props:  MyImageProps) => {
             />
             {/* https://sentry.io/answers/how-do-you-show-or-hide-elements-in-react/ */}
             {state.isLoading && <ActivityIndicator />}
-        </View>
+        </TouchableOpacity>
     );
 }
 

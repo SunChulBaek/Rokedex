@@ -26,20 +26,19 @@ const styles = StyleSheet.create({
 
 const PokemonGridItem = ({navigation, item}) => {
     return (
-        <TouchableOpacity
-            style={{flex: 1}}
-            onPress={() => {
-                navigation.navigate('PokemonDetail', item);
-            }}
-        >
+        <View style={{flex: 1}}>
             <MyImage
                 style={{width: '100%', aspectRatio: '1/1'}}
-                source={{uri: Utils.getImageUrl(item.id)}} />
+                source={{uri: Utils.getImageUrl(item.id)}}
+                onClick={() => {
+                    navigation.navigate('PokemonDetail', item);
+                }}
+            />
             <View
                 style={styles.labelBg}>
                 <Text style={styles.labelText}>{item.id}</Text>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 }
 
