@@ -25,7 +25,7 @@ const EvolutionRow = ({navigation, pId, pair}) => {
                 style={{width: 100, aspectRatio: '1/1'}}
                 source={{uri: Utils.getImageUrl(pair.from.id)}}
                 onClick={pId != pair.from.id ? () =>  {
-                    navigation.push('PokemonDetail', {id: pair.from.id});
+                    navigation.push('PokemonDetail', {id: pair.from.id, name: pair.from.name});
                 } : undefined }
             />
             <Text>=></Text>
@@ -33,7 +33,7 @@ const EvolutionRow = ({navigation, pId, pair}) => {
                 style={{width: 100, aspectRatio: '1/1'}}
                 source={{uri: Utils.getImageUrl(pair.to.id)}}
                 onClick={pId != pair.to.id ? () => {
-                    navigation.push('PokemonDetail', {id: pair.to.id});
+                    navigation.push('PokemonDetail', {id: pair.to.id, name: pair.to.name});
                 } : undefined }
             />
         </View>

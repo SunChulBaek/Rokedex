@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import RadialGradient from 'react-native-radial-gradient';
 import MyImage from '../common/MyImage';
 import Utils from '../../util/Utils.tsx';
 
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
 
 const PokemonGridItem = ({navigation, item}) => {
     return (
-        <View style={{flex: 1}}>
+        <RadialGradient style={{flex: 1}} colors={['#61dafbaa','#61dafb33']}>
             <MyImage
                 style={{width: '100%', aspectRatio: '1/1'}}
                 source={{uri: Utils.getImageUrl(item.id)}}
@@ -38,7 +39,7 @@ const PokemonGridItem = ({navigation, item}) => {
                 style={styles.labelBg}>
                 <Text style={styles.labelText}>{item.id}</Text>
             </View>
-        </View>
+        </RadialGradient>
     );
 }
 
