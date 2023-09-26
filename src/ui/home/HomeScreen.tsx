@@ -2,6 +2,7 @@ import React, {memo, useEffect, useState} from 'react';
 import {
     ActivityIndicator,
     FlatList,
+    ScrollView,
     Text,
     View
 } from 'react-native';
@@ -12,6 +13,7 @@ import Utils from '../../util/Utils.tsx';
 import HomeState from './HomeState';
 import HomeParams from './HomeParams';
 import homeViewModel from './HomeViewModel';
+import MyImage from '../common/MyImage';
 
 var items = [];
 
@@ -37,6 +39,18 @@ const HomeScreen = ({navigation}) => {
         case 'hasValue':
             return (
                 <View style={{flex: 1}}>
+                    <ScrollView style={{width: '100%', height: 50, backgroundColor: 'lightgrey'}} horizontal={true}>
+                        {[778, 10044, 10196, 10157, 936, 135, 269, 792].map((e) => (
+                            <MyImage
+                                key={`preset-${e}`}
+                                style={{width: 50, aspectRatio: '1/1'}}
+                                source={{uri: Utils.getImageUrl(e)}}
+                                onClick={() => {
+                                    navigation.navigate('PokemonDetail', {id: e});
+                                }}
+                            />
+                        ))}
+                    </ScrollView>
                     <FlatList
                         data={rowedData(items, 5)}
                         renderItem={(items) => (
