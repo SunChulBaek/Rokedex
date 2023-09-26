@@ -95,7 +95,7 @@ const PokemonDetailScreen = ({navigation, route}) => {
                         </Text>
                     </View>
                     {result.contents.evolutionChain.pairs.map((pair) => (
-                        <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pair={pair} />
+                        <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pId={route.params.id} pair={pair} />
                     ))}
                 </ScrollView>
             );

@@ -18,23 +18,23 @@ const styles = StyleSheet.create({
     }
 });
 
-const EvolutionRow = ({navigation, pair}) => {
+const EvolutionRow = ({navigation, pId, pair}) => {
     return (
         <View style={[styles.evolution]}>
             <MyImage
                 style={{width: 100, aspectRatio: '1/1'}}
                 source={{uri: Utils.getImageUrl(pair.from.id)}}
-                onClick={() => {
+                onClick={pId != pair.from.id ? () =>  {
                     navigation.push('PokemonDetail', {id: pair.from.id});
-                }}
+                } : undefined }
             />
             <Text>=></Text>
             <MyImage
                 style={{width: 100, aspectRatio: '1/1'}}
                 source={{uri: Utils.getImageUrl(pair.to.id)}}
-                onClick={() => {
+                onClick={pId != pair.to.id ? () => {
                     navigation.push('PokemonDetail', {id: pair.to.id});
-                }}
+                } : undefined }
             />
         </View>
     );
