@@ -14,6 +14,7 @@ import HomeState from './HomeState';
 import HomeParams from './HomeParams';
 import homeViewModel from './HomeViewModel';
 import MyImage from '../common/MyImage';
+import HomeShortcuts from './HomeShortcuts';
 
 var items = [];
 
@@ -39,24 +40,11 @@ const HomeScreen = ({navigation}) => {
         case 'hasValue':
             return (
                 <View style={{flex: 1}}>
-                    <ScrollView style={{width: '100%', height: 50, backgroundColor: 'lightgrey'}} horizontal={true}>
-                        {[778, 10044, 10196, 10157, 936, 135, 269, 792].map((e) => (
-                            <View
-                                key={`preset-${e}`}
-                                style={{width: 50, aspectRatio: '1/1', justifyContent: 'center', alignItems: 'center'}}
-                            >
-                                <View style={{width:40, height: 40, borderRadius: 20, backgroundColor: 'white'}}>
-                                    <MyImage
-                                        style={{width: '100%', height: '100%'}}
-                                        source={{uri: Utils.getImageUrl(e)}}
-                                        onClick={() => {
-                                            navigation.navigate('PokemonDetail', {id: e});
-                                        }}
-                                    />
-                                </View>
-                            </View>
-                        ))}
-                    </ScrollView>
+                    <HomeShortcuts
+                        navigation={navigation}
+                        pIds={[778, 10044, 10196, 10157, 936, 135, 269, 792]}
+                        onClick={(pId) => {navigation.navigate('PokemonDetail', {id: pId})}}
+                    />
                     <FlatList
                         data={rowedData(items, 5)}
                         renderItem={(items) => (
