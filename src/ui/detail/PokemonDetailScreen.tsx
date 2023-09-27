@@ -32,8 +32,44 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: 50,
         paddingRight: 50
+    },
+    loading: {
+        flex:1,
+        fontSize: 8,
+        backgroundColor: 'lightgrey',
+        borderColor: 'black',
+        borderWidth: 1,
+        paddingLeft: 4,
+        color: 'black'
+    },
+    complete: {
+        flex:1,
+        fontSize: 8,
+        backgroundColor: 'green',
+        borderColor: 'black',
+        borderWidth: 1,
+        paddingLeft: 4,
+        color: 'white'
     }
 });
+
+const PokemonProgressItem = ({completed, text}) => {
+    return (
+        <Text style={completed ? styles.complete : styles.loading}>{text}</Text>
+    )
+};
+
+const PokemonProgress = ({pokemon}) => {
+    return (
+        <View style={{height: 10, flexDirection: 'row'}}>
+            <PokemonProgressItem completed={pokemon.height != undefined} text={'pokemon'} />
+            <PokemonProgressItem completed={pokemon.sId != undefined} text={'species'} />
+            <PokemonProgressItem completed={pokemon.fId != undefined} text={'form'} />
+            <PokemonProgressItem completed={pokemon.tIds != undefined} text={'type'} />
+            <PokemonProgressItem completed={pokemon.evolutionChain != undefined} text={'evolution'} />
+        </View>
+    );
+}
 
 const PokemonDetailScreen = ({navigation, route}) => {
     const [pokemon, setPokemon] = useState(new PokemonDetail(
@@ -113,38 +149,41 @@ const PokemonDetailScreen = ({navigation, route}) => {
     }, []);
 
     return (
-        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-            <View style={styles.item}>
-                <MyImage
-                    style={{width: 200, aspectRatio: '1/1'}}
-                    source={{uri: Utils.getImageUrl(route.params.id)}}
-                />
-            </View>
-            <View style={styles.item}>
-                <Text style={{color: 'black', fontSize: (pokemon.form != undefined && pokemon.form.formName != undefined) ? 20 : 30}}>
-                    {route.params.id} {pokemon.species != undefined ? pokemon.species.name : route.params.name} {(pokemon.form != undefined && pokemon.form.formName != undefined) ? `(${pokemon.form.formName})`: ''}
-                </Text>
-            </View>
-            <View style={[styles.item, styles.stat]}>
-                <Text style={{color: 'black', fontSize: 12}}>
-                    몸무게: {(pokemon.weight / 10).toFixed(1)}kg
-                </Text>
-                <Text style={{color: 'black', fontSize: 12}}>
-                    키: {(pokemon.height / 10).toFixed(1)}m
-                </Text>
-                <Text style={{color: 'black', fontSize: 12}}>
-                    타입: {pokemon.types != undefined ? pokemon.types.map((type) => type.name).reduce((acc, cur) => `${acc}, ${cur}`) : ''}
-                </Text>
-            </View>
-            <View style={styles.item}>
-                <Text style={{color: 'black', fontSize: 16}}>
-                    {pokemon.species != undefined ? pokemon.species.flavor.replace('\n', ' ') : ''}
-                </Text>
-            </View>
-            {pokemon.evolutionChain != undefined ? pokemon.evolutionChain.pairs.map((pair) => (
-                <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pId={route.params.id} pair={pair} />
-            )) : <View />}
-        </ScrollView>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+            <ScrollView style={{flex: 1}}>
+                <View style={styles.item}>
+                    <MyImage
+                        style={{width: 200, aspectRatio: '1/1'}}
+                        source={{uri: Utils.getImageUrl(route.params.id)}}
+                    />
+                </View>
+                <View style={styles.item}>
+                    <Text style={{color: 'black', fontSize: (pokemon.form != undefined && pokemon.form.formName != undefined) ? 20 : 30}}>
+                        {route.params.id} {pokemon.species != undefined ? pokemon.species.name : route.params.name} {(pokemon.form != undefined && pokemon.form.formName != undefined) ? `(${pokemon.form.formName})`: ''}
+                    </Text>
+                </View>
+                <View style={[styles.item, styles.stat]}>
+                    <Text style={{color: 'black', fontSize: 12}}>
+                        몸무게: {(pokemon.weight / 10).toFixed(1)}kg
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 12}}>
+                        키: {(pokemon.height / 10).toFixed(1)}m
+                    </Text>
+                    <Text style={{color: 'black', fontSize: 12}}>
+                        타입: {pokemon.types != undefined ? pokemon.types.map((type) => type.name).reduce((acc, cur) => `${acc}, ${cur}`) : ''}
+                    </Text>
+                </View>
+                <View style={styles.item}>
+                    <Text style={{color: 'black', fontSize: 16}}>
+                        {pokemon.species != undefined ? pokemon.species.flavor.replace('\n', ' ') : ''}
+                    </Text>
+                </View>
+                {pokemon.evolutionChain != undefined ? pokemon.evolutionChain.pairs.map((pair) => (
+                    <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pId={route.params.id} pair={pair} />
+                )) : <View />}
+            </ScrollView>
+            <PokemonProgress pokemon={pokemon} />
+        </View>
     );
 }
 
