@@ -110,11 +110,9 @@ const PokemonDetailScreen = ({navigation, route}) => {
             form
         ));
         // type
-        const types = await Promise.all(pokemonDetail.tIds.map(async (tId) => {
-            const type = await repository.getType(tId);
-            console.debug(`${tId} type = ${type.name}`);
-            return type;
-        }));
+        const types = await Promise.all(pokemonDetail.tIds.map(async (tId) =>
+            await repository.getType(tId)
+        ));
         setPokemon(new PokemonDetail(
             route.params.id,
             route.params.name,
