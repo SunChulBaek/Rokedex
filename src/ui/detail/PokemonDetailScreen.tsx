@@ -12,6 +12,7 @@ import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository'
 import PokemonDetail from './../model/PokemonDetail';
 import MyImage from '../common/MyImage';
 import EvolutionRow from '../common/EvolutionRow';
+import PokemonDetailLoadingProgress from './PokemonDetailLoadingProgress';
 import Utils from '../../util/Utils.tsx';
 
 const styles = StyleSheet.create({
@@ -32,44 +33,8 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: 50,
         paddingRight: 50
-    },
-    loading: {
-        flex:1,
-        fontSize: 8,
-        backgroundColor: 'lightgrey',
-        borderColor: 'black',
-        borderWidth: 1,
-        paddingLeft: 4,
-        color: 'black'
-    },
-    complete: {
-        flex:1,
-        fontSize: 8,
-        backgroundColor: 'green',
-        borderColor: 'black',
-        borderWidth: 1,
-        paddingLeft: 4,
-        color: 'white'
     }
 });
-
-const PokemonProgressItem = ({completed, text}) => {
-    return (
-        <Text style={completed ? styles.complete : styles.loading}>{text}</Text>
-    )
-};
-
-const PokemonProgress = ({pokemon}) => {
-    return (
-        <View style={{height: 10, flexDirection: 'row'}}>
-            <PokemonProgressItem completed={pokemon.height != undefined} text={'pokemon'} />
-            <PokemonProgressItem completed={pokemon.sId != undefined} text={'species'} />
-            <PokemonProgressItem completed={pokemon.fId != undefined} text={'form'} />
-            <PokemonProgressItem completed={pokemon.tIds != undefined} text={'type'} />
-            <PokemonProgressItem completed={pokemon.evolutionChain != undefined} text={'evolution'} />
-        </View>
-    );
-}
 
 const PokemonDetailScreen = ({navigation, route}) => {
     const [pokemon, setPokemon] = useState(new PokemonDetail(
@@ -180,7 +145,7 @@ const PokemonDetailScreen = ({navigation, route}) => {
                     <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pId={route.params.id} pair={pair} />
                 )) : <View />}
             </ScrollView>
-            <PokemonProgress pokemon={pokemon} />
+            <PokemonDetailLoadingProgress pokemon={pokemon} />
         </View>
     );
 }
