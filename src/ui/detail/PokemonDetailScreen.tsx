@@ -164,10 +164,10 @@ const PokemonDetailScreen = ({navigation, route}) => {
                 </View>
                 <View style={[styles.item, styles.stat]}>
                     <Text style={{color: 'black', fontSize: 12}}>
-                        몸무게: {(pokemon.weight / 10).toFixed(1)}kg
+                        몸무게: {pokemon.weight != undefined ? `${(pokemon.weight / 10).toFixed(1)}kg` : ''}
                     </Text>
                     <Text style={{color: 'black', fontSize: 12}}>
-                        키: {(pokemon.height / 10).toFixed(1)}m
+                        키: {pokemon.height != undefined ? `${(pokemon.height / 10).toFixed(1)}m` : ''}
                     </Text>
                     <Text style={{color: 'black', fontSize: 12}}>
                         타입: {pokemon.types != undefined ? pokemon.types.map((type) => type.name).reduce((acc, cur) => `${acc}, ${cur}`) : ''}
