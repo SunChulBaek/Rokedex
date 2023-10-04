@@ -1,19 +1,23 @@
-import {selectorFamily} from 'recoil';
-import getPokemonListUseCase from '../../domain/GetPokemonListUseCase';
+import PokemonRepository from '../../repository/PokemonRepository';
+import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
 
-var result = [];
+class HomeViewModel {
+    private items: Pokemon[] = [];
+    private setItems: (items: Pokemon[]) => any;
 
-const homeViewModel = selectorFamily({
-    key: 'homeViewModel',
-    get: (offset: integer) => async ({get}) => {
-        console.debug(`homeViewModel(offset = ${offset})`);
-        const newPokemons = await get(getPokemonListUseCase(offset));
-        result = [
-            ...result,
+    public constructor(setItems: (items: Pokemon[]) => any) {
+        this.setItems = setItems;
+    }
+
+    public async init(offset: integer) {
+        const repository: PokemonRepository = NetworkPokemonRepository.getInstance();
+        const newPokemons = await repository.getPokemonList(offset);
+        this.items = [
+            ...this.items,
             ...newPokemons
         ];
-        return result;
+        this.setItems(this.items);
     }
-})
+}
 
-export default homeViewModel;
+export default HomeViewModel;

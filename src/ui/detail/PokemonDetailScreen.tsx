@@ -9,12 +9,12 @@ const PokemonDetailScreen = ({navigation, route}) => {
     // 프로그레스 표시
     const [pokemon, setPokemon] = useState(undefined);
 
-    const viewModel = new PokemonDetailViewModel(
+    const [viewModel, setViewModel] = useState(new PokemonDetailViewModel(
         route.params.id,
         route.params.name,
         setPokemon,
         setItems
-    );
+    ));
 
     useEffect(() => {
         viewModel.init();
