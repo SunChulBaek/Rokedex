@@ -1,12 +1,13 @@
 import PokemonRepository from '../../repository/PokemonRepository';
 import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
+import HomeState from './HomeState';
 
 class HomeViewModel {
     private items: Pokemon[] = [];
-    private setItems: (items: Pokemon[]) => any;
+    private setHomeState: (state: HomeState) => any;
 
-    public constructor(setItems: (items: Pokemon[]) => any) {
-        this.setItems = setItems;
+    public constructor(setHomeState: (state: HomeState) => any) {
+        this.setHomeState = setHomeState;
     }
 
     public async init(offset: integer) {
@@ -16,7 +17,7 @@ class HomeViewModel {
             ...this.items,
             ...newPokemons
         ];
-        this.setItems(this.items);
+        this.setHomeState(new HomeState('hasValue', this.items));
     }
 }
 
