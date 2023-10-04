@@ -40,11 +40,11 @@ type PokemonDetailLoadingProgressType = {
 const PokemonDetailLoadingProgress = (props: PokemonDetailLoadingProgressType) => {
     return (
         <View style={{height: 10, flexDirection: 'row'}}>
-            <PokemonLoadingProgressItem completed={props.pokemon.height != undefined} text={'pokemon'} />
-            <PokemonLoadingProgressItem completed={props.pokemon.sId != undefined} text={'species'} />
-            <PokemonLoadingProgressItem completed={props.pokemon.fId != undefined} text={'form'} />
-            <PokemonLoadingProgressItem completed={props.pokemon.tIds != undefined} text={'type'} />
-            <PokemonLoadingProgressItem completed={props.pokemon.evolutionChain != undefined} text={'evolution'} />
+            <PokemonLoadingProgressItem completed={props.pokemon != undefined && props.pokemon.height != undefined} text={'pokemon'} />
+            <PokemonLoadingProgressItem completed={props.pokemon != undefined && props.pokemon.species != undefined} text={'species'} />
+            <PokemonLoadingProgressItem completed={props.pokemon != undefined && props.pokemon.form != undefined} text={'form'} />
+            <PokemonLoadingProgressItem completed={props.pokemon != undefined && props.pokemon.types != undefined} text={'type'} />
+            <PokemonLoadingProgressItem completed={props.pokemon != undefined && props.pokemon.evolutionChain != undefined} text={'evolution'} />
         </View>
     );
 }

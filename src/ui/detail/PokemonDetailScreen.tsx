@@ -1,150 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import {
-    ActivityIndicator,
-    ScrollView,
-    Image,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
-import PokemonRepository from '../../repository/PokemonRepository';
-import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
-import PokemonDetail from './../model/PokemonDetail';
-import MyImage from '../common/MyImage';
-import EvolutionRow from '../common/EvolutionRow';
+import {FlatList,View} from 'react-native';
+import PokemonDetailViewModel from './PokemonDetailViewModel';
 import PokemonDetailLoadingProgress from './PokemonDetailLoadingProgress';
-import Utils from '../../util/Utils.tsx';
-
-const styles = StyleSheet.create({
-    item: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    stat: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 50,
-        paddingRight: 50
-    },
-    evolution: {
-        width: '100%',
-        paddingLeft: 50,
-        paddingRight: 50
-    }
-});
 
 const PokemonDetailScreen = ({navigation, route}) => {
-    const [pokemon, setPokemon] = useState(new PokemonDetail(
-        route.params.id,
-        route.params.name
-    ));
+    // 상세 정보 표시
+    const [items, setItems] = useState([]);
+    // 프로그레스 표시
+    const [pokemon, setPokemon] = useState(undefined);
 
-    const getPokemonDetail = async () => {
-        const repository: PokemonRepository = NetworkPokemonRepository.getInstance();
-        // 상세
-        const pokemonDetail = await repository.getPokemonDetail(route.params.id);
-        setPokemon(new PokemonDetail(
-            route.params.id,
-            route.params.name,
-            pokemonDetail.height,
-            pokemonDetail.weight,
-        ));
-        // species
-        const species = await repository.getSpecies(pokemonDetail.sId);
-        setPokemon(new PokemonDetail(
-            route.params.id,
-            route.params.name,
-            pokemonDetail.height,
-            pokemonDetail.weight,
-            pokemonDetail.sId,
-            species,
-        ));
-        // form
-        const form: Form = await repository.getForm(pokemonDetail.fId);
-        setPokemon(new PokemonDetail(
-            route.params.id,
-            route.params.name,
-            pokemonDetail.height,
-            pokemonDetail.weight,
-            pokemonDetail.sId,
-            species,
-            pokemonDetail.fId,
-            form
-        ));
-        // type
-        const types = await Promise.all(pokemonDetail.tIds.map(async (tId) =>
-            await repository.getType(tId)
-        ));
-        setPokemon(new PokemonDetail(
-            route.params.id,
-            route.params.name,
-            pokemonDetail.height,
-            pokemonDetail.weight,
-            pokemonDetail.sId,
-            species,
-            pokemonDetail.fId,
-            form,
-            pokemonDetail.tIds,
-            types
-        ));
-        // evolution chain
-        const evolutionChain = await repository.getEvolutionChain(species.ecId);
-        setPokemon(new PokemonDetail(
-            route.params.id,
-            route.params.name,
-            pokemonDetail.height,
-            pokemonDetail.weight,
-            pokemonDetail.sId,
-            species,
-            pokemonDetail.fId,
-            form,
-            pokemonDetail.tIds,
-            types,
-            evolutionChain
-        ));
-    }
+    const viewModel = new PokemonDetailViewModel(
+        route.params.id,
+        route.params.name,
+        setPokemon,
+        setItems
+    );
 
     useEffect(() => {
-        getPokemonDetail();
+        viewModel.init();
     }, []);
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
-            <ScrollView style={{flex: 1}}>
-                <View style={styles.item}>
-                    <MyImage
-                        style={{width: 200, aspectRatio: '1/1'}}
-                        source={{uri: Utils.getImageUrl(route.params.id)}}
-                    />
-                </View>
-                <View style={styles.item}>
-                    <Text style={{color: 'black', fontSize: (pokemon.form != undefined && pokemon.form.formName != undefined) ? 20 : 30}}>
-                        {route.params.id} {pokemon.species != undefined ? pokemon.species.name : route.params.name} {(pokemon.form != undefined && pokemon.form.formName != undefined) ? `(${pokemon.form.formName})`: ''}
-                    </Text>
-                </View>
-                <View style={[styles.item, styles.stat]}>
-                    <Text style={{color: 'black', fontSize: 12}}>
-                        몸무게: {pokemon.weight != undefined ? `${(pokemon.weight / 10).toFixed(1)}kg` : ''}
-                    </Text>
-                    <Text style={{color: 'black', fontSize: 12}}>
-                        키: {pokemon.height != undefined ? `${(pokemon.height / 10).toFixed(1)}m` : ''}
-                    </Text>
-                    <Text style={{color: 'black', fontSize: 12}}>
-                        타입: {pokemon.types != undefined ? pokemon.types.map((type) => type.name).reduce((acc, cur) => `${acc}, ${cur}`) : ''}
-                    </Text>
-                </View>
-                <View style={styles.item}>
-                    <Text style={{color: 'black', fontSize: 16}}>
-                        {pokemon.species != undefined ? pokemon.species.flavor.replace('\n', ' ') : ''}
-                    </Text>
-                </View>
-                {pokemon.evolutionChain != undefined ? pokemon.evolutionChain.pairs.map((pair) => (
-                    <EvolutionRow key={`${pair.from.id}-${pair.to.id}`} navigation={navigation} pId={route.params.id} pair={pair} />
-                )) : <View />}
-            </ScrollView>
+            <FlatList
+                style={{flex: 1}}
+                data={items}
+                renderItem={({item, index, separators}) =>
+                    item.itemContent({navigation: navigation}
+                )}
+            />
             <PokemonDetailLoadingProgress pokemon={pokemon} />
         </View>
     );

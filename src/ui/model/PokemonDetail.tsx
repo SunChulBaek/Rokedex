@@ -30,7 +30,6 @@ class PokemonDetail {
         types: Type[],
         evolutionChain: EvolutionChain
     ) {
-        console.debug(`PokemonDetail.constructor(tIds = ${tIds})`);
         this.id = id;
         this.name = name;
         this.height = height;

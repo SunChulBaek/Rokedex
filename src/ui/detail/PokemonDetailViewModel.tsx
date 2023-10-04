@@ -1,44 +1,92 @@
-import {selectorFamily} from 'recoil';
-import pokemonDetailParams from './PokemonDetailParams';
-import getPokemonDetailUseCase from '../../domain/GetPokemonDetailUseCase';
-import getSpeciesUseCase from '../../domain/GetSpeciesUseCase';
-import getTypeUseCase from '../../domain/GetTypeUseCase';
-import getEvolutionChainUseCase from '../../domain/GetEvolutionChainUseCase';
-import getFormUseCase from '../../domain/GetFormUseCase';
-import PokemonDetail from '../model/PokemonDetail';
-import Species from '../model/Species';
+import PokemonRepository from '../../repository/PokemonRepository';
+import NetworkPokemonRepository from '../../repository/NetworkPokemonRepository';
+import PokemonDetail from './../model/PokemonDetail';
+import {
+    PokemonDetailItem,
+    PokemonDetailImage,
+    PokemonDetailName,
+    PokemonDetailStat,
+    PokemonDetailFlavorText,
+    PokemonDetailEvolution
+} from './PokemonDetailItem';
 
-const pokemonDetailViewModel = selectorFamily({
-    key: 'pokemonDetailViewModel',
-    get: (pId) => async ({get}) => {
-        if (pId != 0) {
-            const pokemon: PokemonDetail = await get(getPokemonDetailUseCase(pId));
-            const species: Species = await get(getSpeciesUseCase(pokemon.sId));
-            const form: Form = await get(getFormUseCase(pokemon.fId));
-            console.debug(`pokemonDetailViewModel() form = ${form.formName}`);
-            const types = await pokemon.tIds.map((tId) => get(getTypeUseCase(tId)));
-            const evolutionChain = await get(getEvolutionChainUseCase(species.ecId));
-            for (var i = 0; i < evolutionChain.pairs.length; i++) {
-                const pair = evolutionChain.pairs[i];
-                console.debug(`pokemonDetailViewModel() from ${pair.from.id} to ${pair.to.id}`);
-            }
-            return new PokemonDetail(
-                pokemon.id,
-                pokemon.name,
-                pokemon.height,
-                pokemon.weight,
-                pokemon.sId,
-                species,
-                pokemon.fId,
-                form,
-                pokemon.tIds,
-                types,
-                evolutionChain
-            );
-        } else {
-            return new PokemonDetail(pId, '', 0, 0, 0, undefined, 0, undefined, [], undefined);
-        }
+{/* TODO : 엄밀하게는 ViewModel이라고 할 수 없는 친구인데, ts에서 stream을 사용 할 수 있는 방법을 찾아야겠다. */}
+class PokemonDetailViewModel {
+    private pId: integer;
+    private name: string;
+    private setPokemon: (pokemon: PokemonDetail) => any;
+    private setItems: (items: PokemonDetailItem[]) => any;
+
+    public constructor(
+        pId: integer,
+        name: string,
+        setPokemon: (pokemon: PokemonDetail) => any,
+        setItems: (items: PokemonDetailItem[]) => any
+    ) {
+        this.pId = pId;
+        this.name = name;
+        this.setPokemon = setPokemon;
+        this.setItems = setItems;
     }
-});
 
-export default pokemonDetailViewModel;
+    public async init() {
+        const repository: PokemonRepository = NetworkPokemonRepository.getInstance();
+        var pokemonDetail: PokemonDetail;
+        var species: Species;
+        var form: Form;
+        var types: Types[];
+        var evolutionChain: EvolutionChain;
+
+        // 상세
+        pokemonDetail = await repository.getPokemonDetail(this.pId);
+        this.update({pokemonDetail: pokemonDetail});
+
+        // species
+        species = await repository.getSpecies(pokemonDetail.sId);
+        this.update({pokemonDetail: pokemonDetail, species: species});
+
+        // form
+        form = await repository.getForm(pokemonDetail.fId);
+        this.update({pokemonDetail: pokemonDetail, species: species, form: form});
+
+        // type
+        types = await Promise.all(pokemonDetail.tIds.map(async (tId) =>
+            await repository.getType(tId)
+        ));
+        this.update({pokemonDetail: pokemonDetail, species: species, form: form, types: types});
+
+        // evolution chain
+        evolutionChain = await repository.getEvolutionChain(species.ecId);
+        this.update({pokemonDetail: pokemonDetail, species: species, form: form, types: types, evolutionChain: evolutionChain});
+    }
+
+    private update({pokemonDetail, species, form, types, evolutionChain}) {
+        const pokemon = new PokemonDetail(
+            this.pId,
+            this.name,
+            pokemonDetail.height,
+            pokemonDetail.weight,
+            pokemonDetail.sId,
+            species,
+            pokemonDetail.fId,
+            form,
+            pokemonDetail.tIds,
+            types,
+            evolutionChain
+        );
+        this.setPokemon(pokemon);
+        this.setItems(this.pokemonToItems(pokemon));
+    }
+
+    private pokemonToItems(pokemon: PokemonDetail): PokemonDetailItem[] {
+        var items: PokemonDetailItem[] = new Array();
+        items.push(new PokemonDetailImage(pokemon.id));
+        items.push(new PokemonDetailName(pokemon.id, pokemon.name, pokemon.species, pokemon.form));
+        items.push(new PokemonDetailStat(pokemon.weight, pokemon.height, pokemon.types));
+        items.push(new PokemonDetailFlavorText(pokemon.species));
+        items.push(new PokemonDetailEvolution(pokemon.id, pokemon.evolutionChain));
+        return items;
+    }
+}
+
+export default PokemonDetailViewModel;
