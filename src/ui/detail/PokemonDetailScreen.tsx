@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList,View} from 'react-native';
+import {LinearGradient} from 'react-native-linear-gradient';
 import PokemonDetailViewModel from './PokemonDetailViewModel';
 import PokemonDetailLoadingProgress from './PokemonDetailLoadingProgress';
+import CancelButton from '../common/CancelButton';
 
 const PokemonDetailScreen = ({navigation, route}) => {
     // 상세 정보 표시
@@ -21,7 +23,7 @@ const PokemonDetailScreen = ({navigation, route}) => {
     }, []);
 
     return (
-        <View style={{flex: 1, backgroundColor: 'white'}}>
+        <LinearGradient style={{flex: 1}} colors={['#61dafb33', '#61dafbaa']}>
             <FlatList
                 style={{flex: 1}}
                 data={items}
@@ -30,7 +32,13 @@ const PokemonDetailScreen = ({navigation, route}) => {
                 )}
             />
             <PokemonDetailLoadingProgress pokemon={pokemon} />
-        </View>
+            <CancelButton
+                style={{position: 'absolute', alignSelf: 'center', bottom: 15}}
+                onClick={() => {
+                    navigation.goBack();
+                }}
+            />
+        </LinearGradient>
     );
 }
 
