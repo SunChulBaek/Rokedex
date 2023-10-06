@@ -1,69 +1,64 @@
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import Cross from './Cross';
 
 const primaryColor = '#61dafb';
+const defaultButtonSize = 50;
+const defaultBorderWidth = 5;
+const defaultBorder2Width = 2;
 
 const styles = StyleSheet.create({
-    cross: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        transform: [{rotate: '45deg'}]
-    },
-    crossUp : {
-        position: 'absolute',
-        height: 20,
-        width: 2,
-        backgroundColor: primaryColor
-    },
-    crossFlat: {
-        position: 'absolute',
-        width: 20,
-        height: 2,
-        backgroundColor: primaryColor
-    },
     border: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
         backgroundColor: '#ffffff66', // 40%
         alignItems: 'center',
         justifyContent: 'center'
     },
-    colorBorder: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+    color: {
         backgroundColor: primaryColor,
         alignItems: 'center',
         justifyContent: 'center'
     },
     center: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
         backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'center'
     }
 });
 
-const Cross = () => {
-    return (
-        <View style={styles.cross}>
-            <View style={styles.crossUp} />
-            <View style={styles.crossFlat} />
-        </View>
-    );
-}
+const CancelButton = ({buttonSize, borderWidth, border2Width, style, onClick}) => {
+    const size = buttonSize != undefined ? buttonSize : defaultButtonSize;
+    const bw = borderWidth != undefined ? borderWidth : defaultBorderWidth;
+    const bw2 = border2Width != undefined ? border2Width : defaultBorder2Width;
+    const colorSize = size - (bw * 2);
+    const centerSize = size - (bw * 2) - (bw2 * 2);
 
-const CancelButton = ({style, onClick}) => {
+    const pStyles = StyleSheet.create({
+        border: {
+            width: size,
+            height: size,
+            borderRadius: size / 2
+        },
+        color: {
+            width: colorSize,
+            height: colorSize,
+            borderRadius: colorSize / 2
+        },
+        center: {
+            width: centerSize,
+            height: centerSize,
+            borderRadius: centerSize / 2
+        }
+    });
+
     return (
         <TouchableOpacity
-            style={[style, styles.border]}
+            style={[style, styles.border, pStyles.border]}
             onPress={onClick}
         >
-            <View style={styles.colorBorder}>
-                <View style={styles.center}>
-                    <Cross />
+            <View style={[styles.color, pStyles.color]}>
+                <View style={[styles.center, pStyles.center]}>
+                    <Cross
+                        style={{size: 20, width: 2, color: primaryColor, transform: [{rotate: '45deg'}]}}
+                    />
                 </View>
             </View>
         </TouchableOpacity>

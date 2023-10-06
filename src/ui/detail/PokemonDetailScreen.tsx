@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList,View} from 'react-native';
-import {LinearGradient} from 'react-native-linear-gradient';
 import PokemonDetailViewModel from './PokemonDetailViewModel';
 import PokemonDetailLoadingProgress from './PokemonDetailLoadingProgress';
+import PokemonDetailBg from './PokemonDetailBg';
 import CancelButton from '../common/CancelButton';
 
 const PokemonDetailScreen = ({navigation, route}) => {
@@ -23,22 +23,25 @@ const PokemonDetailScreen = ({navigation, route}) => {
     }, []);
 
     return (
-        <LinearGradient style={{flex: 1}} colors={['#61dafb33', '#61dafbaa']}>
-            <FlatList
-                style={{flex: 1}}
-                data={items}
-                renderItem={({item, index, separators}) =>
-                    item.itemContent({navigation: navigation}
-                )}
-            />
-            <PokemonDetailLoadingProgress pokemon={pokemon} />
-            <CancelButton
-                style={{position: 'absolute', alignSelf: 'center', bottom: 15}}
-                onClick={() => {
-                    navigation.goBack();
-                }}
-            />
-        </LinearGradient>
+        <View style={{flex: 1}}>
+            <PokemonDetailBg style={{position: 'absolute', width: '100%', height: '100%'}} />
+            <View style={{position: 'absolute', width: '100%', height: '100%'}}>
+                <FlatList
+                    style={{flex: 1}}
+                    data={items}
+                    renderItem={({item, index, separators}) =>
+                        item.itemContent({navigation: navigation}
+                    )}
+                />
+                <PokemonDetailLoadingProgress pokemon={pokemon} />
+                <CancelButton
+                    style={{position: 'absolute', alignSelf: 'center', bottom: 15}}
+                    onClick={() => {
+                        navigation.goBack();
+                    }}
+                />
+            </View>
+        </View>
     );
 }
 
