@@ -37,6 +37,9 @@ class PokemonDetailViewModel {
         var types: Types[];
         var evolutionChain: EvolutionChain;
 
+        // api 호출 전
+        this.update({pokemonDetail: new PokemonDetail(this.pId, this.name)});
+
         // 상세
         pokemonDetail = await repository.getPokemonDetail(this.pId);
         this.update({pokemonDetail: pokemonDetail});
