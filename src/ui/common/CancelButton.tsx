@@ -57,7 +57,9 @@ const CancelButton = ({buttonSize, borderWidth, border2Width, style, onClick}) =
             <View style={[styles.color, pStyles.color]}>
                 <View style={[styles.center, pStyles.center]}>
                     <Cross
-                        style={{size: 20, width: 2, color: primaryColor, transform: [{rotate: '45deg'}]}}
+                        style={{width: 20, height: 20, transform: [{rotate: '45deg'}]}}
+                        color={primaryColor}
+                        width={2}
                     />
                 </View>
             </View>

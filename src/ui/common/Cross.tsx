@@ -1,30 +1,26 @@
 import {View, StyleSheet} from 'react-native';
 
-const Cross = ({style}) => {
+const Cross = ({style, color, width}) => {
     const styles = StyleSheet.create({
         cross: {
-            width: style.size,
-            height: style.size,
             alignItems: 'center',
             justifyContent: 'center',
-            transform: style.transform != undefined ? style.transform : [],
-            backgroundColor: style.backgroundColor != undefined ? style.backgroundColor : 'transparent'
         },
         crossUp : {
             position: 'absolute',
-            width: style.size,
-            height: style.width,
-            backgroundColor: style.color
+            width: '100%',
+            height: width,
+            backgroundColor: color
         },
         crossFlat: {
             position: 'absolute',
-            width: style.width,
-            height: style.size,
-            backgroundColor: style.color
+            width: width,
+            height: '100%',
+            backgroundColor: color
         }
     });
     return (
-        <View style={styles.cross}>
+        <View style={[styles.cross, style]}>
             <View style={styles.crossUp} />
             <View style={styles.crossFlat} />
         </View>
