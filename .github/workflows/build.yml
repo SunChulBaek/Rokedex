@@ -19,7 +19,7 @@ jobs:
         with:
           java-distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-          android-hoem: "android"
+          android-home: "android"
           base64-keystore: ${{ secrets.BASE64_KEYSTORE }}
           release-key-alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           release-key-password: ${{ secrets.RELEASE_KEY_PASSWORD }}
