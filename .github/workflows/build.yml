@@ -17,6 +17,7 @@ jobs:
     steps:
       - uses: SunChulBaek/build_android@v2.1
         with:
+          react-native: true
           java-distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
           android-home: "android"
