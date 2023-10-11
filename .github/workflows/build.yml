@@ -15,8 +15,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: cd android
-        shell: bash
       - uses: SunChulBaek/build_android@v2
         with:
           java-distribution: ${{ env.JAVA_DISTRIBUTION }}
