@@ -31,11 +31,6 @@ const HomeScreen = ({navigation}) => {
         case 'hasValue':
             return (
                 <View style={{flex: 1}}>
-                    <HomeShortcuts
-                        navigation={navigation}
-                        pIds={[778, 10044, 10196, 10157, 936, 135, 269, 792]}
-                        onClick={(pId) => {navigation.navigate('PokemonDetail', {id: pId})}}
-                    />
                     <FlatGrid
                         data={homeState.items}
                         rowCount={5}
