@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: SunChulBaek/build_android@v2.1
+      - uses: SunChulBaek/build_android@v1
         with:
           build-react-native: true # for React Native
           android-home: "android" # for React Native
